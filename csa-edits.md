@@ -2,7 +2,7 @@
 
 ## Filter for Lernmaterialien
 
-	BuddyBoss Theme: learndash-helper.php (inc/plugins/learndash-helper.php)
+BuddyBoss Theme: learndash-helper.php (inc/plugins/learndash-helper.php)
 
 	case 'recent': hinzufügen
 
@@ -21,25 +21,19 @@ BuddyBoss Theme: learndash-sidebar.php (learndash/ld30/learndash-sidebar.php)
 
 ### Fix missing title with trailing exams
 
-<span class="flex-1 bb-lms-title <?php echo esc_attr( learndash_is_quiz_complete( $user_id, $lesson_quiz['post']->ID, $course_id ) ? 'bb-completed-item' : 'bb-not-completed-item' ); ?>">
-<?php echo $lesson_quiz['post']->post_title; ?>
-</span>
-
-
+	<span class="flex-1 bb-lms-title <?php echo esc_attr( learndash_is_quiz_complete( $user_id, $lesson_quiz['post']->ID, $course_id ) ? 'bb-completed-item' : 'bb-not-completed-item' ); ?>">
+	<?php echo $lesson_quiz['post']->post_title; ?>
+	</span>
 
 ## Course placeholders
 
 learndash/ld30/course.php
-
-// translators: placeholder: Course.
-esc_html_x( 'Inhalt', 'placeholder: Course', 'buddyboss-theme' ),
+	esc_html_x( 'Inhalt', 'placeholder: Course', 'buddyboss-theme' ),
 
 
-## Excerpts in Topics 
+## Enable excerpts for LearnDash Topics
 
 BuddyBoss Theme: Theme-Funktionen (functions.php)
-
-// Enable excerpts for LearnDash Topics
 
 	function add_excerpts_to_ld_topic() {
 		add_post_type_support( 'sfwd-topic', 'excerpt' );
@@ -50,23 +44,23 @@ BuddyBoss Theme: Theme-Funktionen (functions.php)
 
 ### Fix for random pagination issues
 
-session_start();
+	session_start();
 
-add_filter('posts_orderby', 'edit_posts_orderby');
+	add_filter('posts_orderby', 'edit_posts_orderby');
 
-function edit_posts_orderby($orderby_statement) {
+	function edit_posts_orderby($orderby_statement) {
 
-if (is_page('einzelmaterialien') || is_page('links')) {
-    $seed = $_SESSION['seed'];
-    if (empty($seed)) {
-      $seed = rand();
-      $_SESSION['seed'] = $seed;
-    }
+	if (is_page('einzelmaterialien') || is_page('links')) {
+		$seed = $_SESSION['seed'];
+		if (empty($seed)) {
+		$seed = rand();
+		$_SESSION['seed'] = $seed;
+		}
 
-    $orderby_statement = 'RAND('.$seed.')';
-}
-    return $orderby_statement;
-}
+		$orderby_statement = 'RAND('.$seed.')';
+	}
+		return $orderby_statement;
+	}
 
 
 ## Zotpress
@@ -75,24 +69,23 @@ zotpress/js/zotpress.shortcode.bib.min.js (aktiv)
 
 	// Add abstracts, if any
 	
-	if ( params.zpShowAbstracts == true &&
-	( item.data.hasOwnProperty('abstractNote') && item.data.abstractNote.length > 0 ) )
-	tempItem +="<p class='zp-Abstract'><span class='zp-Abstract-Title'>Abstract:</span> " +item.data.abstractNote+ "</p>\n";
+		if ( params.zpShowAbstracts == true &&
+		( item.data.hasOwnProperty('abstractNote') && item.data.abstractNote.length > 0 ) )
+		tempItem +="<p class='zp-Abstract'><span class='zp-Abstract-Title'>Abstract:</span> " +item.data.abstractNote+ "</p>\n";
 								
-// Add notes, if any
-if ( params.zpShowNotes == true && item.hasOwnProperty('notes') )
-tempItem +="<div class='zp-Citation-Notes' tabindex='0'>" +item.notes+ "</div>\n";
+	// Add notes, if any
+		if ( params.zpShowNotes == true && item.hasOwnProperty('notes') )
+		tempItem +="<div class='zp-Citation-Notes' tabindex='0'>" +item.notes+ "</div>\n";
 
-// Add tags, if any
-
+	// Add tags, if any
 
 zotpress/lib/shortcode/shortcode.request.php (aktiv)
-	$zp_target_output = "target='_blank' ";
 
- zotpress/lib/shortcode/shortcode.request.php
+		$zp_target_output = "target='_blank' ";
 
+zotpress/lib/shortcode/shortcode.request.php
 
- Cite -> Zitieren
+	Cite -> Zitieren
 
 ## Elementor Pro
 
@@ -125,13 +118,13 @@ elementor-pro/modules/posts/skins/skin-cards.php
 
 events-widgets-for-elementor-and-the-events-calendar/widgets/layouts/ectbe-list.php
 
-$events_html .='<h2 class="ectbe-list-title"><a href="'.esc_url( $url).'">'.$event_title.'</a></h2>
+	$events_html .='<h2 class="ectbe-list-title"><a href="'.esc_url( $url).'">'.$event_title.'</a></h2>
 
-// Remove this! //
+	// Remove this! //
 
-elseif ( $style == 'style-1' ) {
-				$events_html .= $ectbe_read_more;
-			}
+	elseif ( $style == 'style-1' ) {
+					$events_html .= $ectbe_read_more;
+				}
 
 
 ## Events Calendar 
@@ -139,29 +132,29 @@ elseif ( $style == 'style-1' ) {
  the-events-calendar/src/views/v2/list/event/date-tag.php 
 
 
-$event_month_title  = $display_date->format_i18n( 'M' );
-$event_day_num   = $display_date->format_i18n( 'j' );
-$event_date_attr = $display_date->format( Dates::DBDATEFORMAT );
-?>
-<div class="tribe-events-calendar-list__event-date-tag tribe-common-g-col">
-	<time class="tribe-events-calendar-list__event-date-tag-datetime" datetime="<?php echo esc_attr( $event_date_attr ); ?>" aria-hidden="true">
-		<span class="tribe-events-calendar-list__event-date-tag-weekday">
-			<?php echo esc_html( $event_month_title ); ?>
-		</span>
-		<span class="tribe-events-calendar-list__event-date-tag-daynum tribe-common-h5 tribe-common-h4--min-medium">
-			<?php echo esc_html( $event_day_num ); ?>
-		</span>
-	</time>
-</div>
+	$event_month_title  = $display_date->format_i18n( 'M' );
+	$event_day_num   = $display_date->format_i18n( 'j' );
+	$event_date_attr = $display_date->format( Dates::DBDATEFORMAT );
+	?>
+	<div class="tribe-events-calendar-list__event-date-tag tribe-common-g-col">
+		<time class="tribe-events-calendar-list__event-date-tag-datetime" datetime="<?php echo esc_attr( $event_date_attr ); ?>" aria-hidden="true">
+			<span class="tribe-events-calendar-list__event-date-tag-weekday">
+				<?php echo esc_html( $event_month_title ); ?>
+			</span>
+			<span class="tribe-events-calendar-list__event-date-tag-daynum tribe-common-h5 tribe-common-h4--min-medium">
+				<?php echo esc_html( $event_day_num ); ?>
+			</span>
+		</time>
+	</div>
 
 ## Taxopress 
 
-<a href="%tag_link%" id="tag-link-%tag_id%" class="st-tags t%tag_scale%" title="%tag_count% topics" %tag_rel% style="%tag_size% %tag_color%">%tag_name%</a>
+	<a href="%tag_link%" id="tag-link-%tag_id%" class="st-tags t%tag_scale%" title="%tag_count% topics" %tag_rel% style="%tag_size% %tag_color%">%tag_name%</a>
 
-////////////// H5P //////////////	 
+## H5P 
 
 h5pmods-wordpress-plugin-master/styles/general.css 
 
-.h5p-inner {
- border: 1px solid #999 !important;
-}
+	.h5p-inner {
+	border: 1px solid #999 !important;
+	}
