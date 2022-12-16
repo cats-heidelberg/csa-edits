@@ -28,6 +28,7 @@ BuddyBoss Theme: learndash-sidebar.php (learndash/ld30/learndash-sidebar.php)
 ## Course placeholders
 
 learndash/ld30/course.php
+
 	esc_html_x( 'Inhalt', 'placeholder: Course', 'buddyboss-theme' ),
 
 
