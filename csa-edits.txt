@@ -1,10 +1,7 @@
-////////////// Anpassungen Theme: //////////////
- 
-/////////////// Modulbanner Permalinks: //////////////
+# Theme and plugin edits
 
-BuddyBoss Theme: template-banner.php (learndash/ld30/template-banner.php)
+## Filter for Lernmaterialien
 
-////////////// Voreingesteller Filter //////////////
 	BuddyBoss Theme: learndash-helper.php (inc/plugins/learndash-helper.php)
 
 	case 'recent': hinzufügen
