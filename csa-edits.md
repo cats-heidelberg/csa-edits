@@ -11,7 +11,7 @@
 					$query_order    = 'desc';
 					break;
 
-////////////// Sidebar htmlentities //////////////
+## Sidebar htmlentities
 
 BuddyBoss Theme: learndash-sidebar.php (learndash/ld30/learndash-sidebar.php)
 
@@ -19,7 +19,7 @@ BuddyBoss Theme: learndash-sidebar.php (learndash/ld30/learndash-sidebar.php)
 	
 	<h2 class="course-entry-title"><?php echo $parent_course_title; ?></h2>
 
-// Fix missing title with trailing exams
+### Fix missing title with trailing exams
 
 <span class="flex-1 bb-lms-title <?php echo esc_attr( learndash_is_quiz_complete( $user_id, $lesson_quiz['post']->ID, $course_id ) ? 'bb-completed-item' : 'bb-not-completed-item' ); ?>">
 <?php echo $lesson_quiz['post']->post_title; ?>
@@ -27,7 +27,7 @@ BuddyBoss Theme: learndash-sidebar.php (learndash/ld30/learndash-sidebar.php)
 
 
 
-////////////// Inhalt //////////////
+## Course placeholders
 
 learndash/ld30/course.php
 
@@ -35,7 +35,7 @@ learndash/ld30/course.php
 esc_html_x( 'Inhalt', 'placeholder: Course', 'buddyboss-theme' ),
 
 
-////////////// Excerpts in Topics //////////////
+## Excerpts in Topics 
 
 BuddyBoss Theme: Theme-Funktionen (functions.php)
 
@@ -48,7 +48,7 @@ BuddyBoss Theme: Theme-Funktionen (functions.php)
 
 
 
-// Fix for random pagination issues
+### Fix for random pagination issues
 
 session_start();
 
@@ -69,7 +69,7 @@ if (is_page('einzelmaterialien') || is_page('links')) {
 }
 
 
-////////////// Zotpress //////////////
+## Zotpress
 
 zotpress/js/zotpress.shortcode.bib.min.js (aktiv)
 
@@ -94,7 +94,7 @@ zotpress/lib/shortcode/shortcode.request.php (aktiv)
 
  Cite -> Zitieren
 
-////////////// Elementor: //////////////
+## Elementor Pro
 
 elementor-pro/modules/posts/skins/skin-cards.php
 
@@ -121,7 +121,7 @@ elementor-pro/modules/posts/skins/skin-cards.php
 			<?php
 		}
 
-////////////// Events Widget //////////////	 
+##  Events Widget 
 
 events-widgets-for-elementor-and-the-events-calendar/widgets/layouts/ectbe-list.php
 
@@ -133,11 +133,8 @@ elseif ( $style == 'style-1' ) {
 				$events_html .= $ectbe_read_more;
 			}
 
-///
 
-lesson.php (learndash/ld30/lesson.php)
-
-////////////// Events Calendar //////////////	 
+## Events Calendar 
 
  the-events-calendar/src/views/v2/list/event/date-tag.php 
 
@@ -157,11 +154,7 @@ $event_date_attr = $display_date->format( Dates::DBDATEFORMAT );
 	</time>
 </div>
 
-
-
-
-
-////////////// Taxopress //////////////	 
+## Taxopress 
 
 <a href="%tag_link%" id="tag-link-%tag_id%" class="st-tags t%tag_scale%" title="%tag_count% topics" %tag_rel% style="%tag_size% %tag_color%">%tag_name%</a>
 
