@@ -88,6 +88,43 @@ zotpress/lib/shortcode/shortcode.request.php
 
 	Cite -> Zitieren
 
+
+	// Display notes, if any
+
+							if ( count($zp_notes_meta) == 1 && (strpos($zp_notes_meta[0], 'privat') === false))
+							{
+								$temp_notes = "<li id=\"zp-Note-".$item->key."\">\n";
+								$temp_notes .= $zp_notes_meta[0]."\n";
+                                	// Add to item
+								$item->notes = $temp_notes . "</li>\n";
+
+								// Add note reference to citation
+								$note_class = "zp-Notes-Reference"; if ( is_admin_bar_showing() ) $note_class .= " zp-Admin-Bar-Showing";
+								$item->bib = preg_replace('~(.*)' . preg_quote('</div>', '~') . '(.*?)~', '$1' . " <sup class=\"".$note_class."\"><a href=\"#zp-Note-".$item->key."\">".$zp_notes_num."</a></sup> </div>" . '$2', $item->bib, 1);
+								$zp_notes_num++;
+                            } else if ( count($zp_notes_meta) > 1) // multiple
+
+								{
+                                    $temp_notes = "<li id=\"zp-Note-".$item->key."\">\n";
+									$temp_notes .= "<ul class='zp-Citation-Item-Notes'>\n";
+
+									foreach ($zp_notes_meta as $zp_note_meta)
+                                    if (strpos($zp_note_meta, '[privat]') === false)
+										$temp_notes .= "<li class='zp-Citation-note'>" . $zp_note_meta . "\n</li>\n";
+
+									$temp_notes .= "\n</ul><!-- .zp-Citation-Item-Notes -->\n\n";
+                                    	// Add to item
+								$item->notes = $temp_notes . "</li>\n";
+
+								// Add note reference to citation
+								$note_class = "zp-Notes-Reference"; if ( is_admin_bar_showing() ) $note_class .= " zp-Admin-Bar-Showing";
+								$item->bib = preg_replace('~(.*)' . preg_quote('</div>', '~') . '(.*?)~', '$1' . " <sup class=\"".$note_class."\"><a href=\"#zp-Note-".$item->key."\">".$zp_notes_num."</a></sup> </div>" . '$2', $item->bib, 1);
+								$zp_notes_num++;
+								}
+						} // Children exist; not "Item not found"
+					} // Check if item has children
+				} // $zpr["downloadable"]
+				
 ## Elementor Pro
 
 elementor-pro/modules/posts/skins/skin-cards.php
