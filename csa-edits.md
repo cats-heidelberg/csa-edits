@@ -1,68 +1,78 @@
 # Theme and plugin edits
 
-## Filter for Lernmaterialien
+# Plugins
 
-BuddyBoss Theme: learndash-helper.php (inc/plugins/learndash-helper.php)
+## Elementor Pro
 
-	case 'recent': hinzufügen
+_Replace "render_badge" function in order to display multiple badges._
 
-	case 'recent':
-					$query_order_by = 'date';
-					$query_order    = 'desc';
-					break;
+-> elementor-pro/modules/posts/skins/skin-cards.php
 
-## Sidebar htmlentities
+	protected function render_badge() {
+			$taxonomy = $this->get_instance_value( 'badge_taxonomy' );
+			if ( empty( $taxonomy ) || ! taxonomy_exists( $taxonomy ) ) {
+				return;
+			}
 
-BuddyBoss Theme: learndash-sidebar.php (learndash/ld30/learndash-sidebar.php)
-
-	<a href="<?php echo get_permalink( $lesson->ID ); ?>" title="<?php echo htmlEntities($lesson->post_title); ?>" class="bb-lesson-head flex">
-	
-	<h2 class="course-entry-title"><?php echo $parent_course_title; ?></h2>
-
-### Fix missing title with trailing exams
-
-	<span class="flex-1 bb-lms-title <?php echo esc_attr( learndash_is_quiz_complete( $user_id, $lesson_quiz['post']->ID, $course_id ) ? 'bb-completed-item' : 'bb-not-completed-item' ); ?>">
-	<?php echo $lesson_quiz['post']->post_title; ?>
-	</span>
-
-## Course placeholders
-
-learndash/ld30/course.php
-
-	esc_html_x( 'Inhalt', 'placeholder: Course', 'buddyboss-theme' ),
-
-
-## Enable excerpts for LearnDash Topics
-
-BuddyBoss Theme: Theme-Funktionen (functions.php)
-
-	function add_excerpts_to_ld_topic() {
-		add_post_type_support( 'sfwd-topic', 'excerpt' );
-	}
-	add_action( 'init', 'add_excerpts_to_ld_topic' );
-
-
-
-### Fix for random pagination issues
-
-	session_start();
-
-	add_filter('posts_orderby', 'edit_posts_orderby');
-
-	function edit_posts_orderby($orderby_statement) {
-
-	if (is_page('einzelmaterialien') || is_page('links')) {
-		$seed = $_SESSION['seed'];
-		if (empty($seed)) {
-		$seed = rand();
-		$_SESSION['seed'] = $seed;
+			$terms = get_the_terms( get_the_ID(), $taxonomy );
+			if ( ! is_array( $terms ) ) {
+				return;
+			}
+			?>
+			<div class="elementor-post__badges"><?php
+				$i=1;
+				foreach( array_slice($terms,0,3) as $term ) : ?>
+					<div class="elementor-post__badge elementor-post__badge<?php echo $i; ?>"><?php echo $term->name; ?></div>
+				
+				<?php 
+			$i+=1; 
+			endforeach; ?>
+				</div>
+			<?php
 		}
+  
+##  Events Widgets For Elementor And The Events Calendar
 
-		$orderby_statement = 'RAND('.$seed.')';
-	}
-		return $orderby_statement;
-	}
+_Remove "read more" button in the calendar widget on the main page._
 
+-> events-widgets-for-elementor-and-the-events-calendar/widgets/layouts/ectbe-list.php
+
+	// Remove this! //
+
+	elseif ( $style == 'style-1' ) {
+					$events_html .= $ectbe_read_more;
+				}
+
+
+## Events Calendar 
+
+_Replace date/time format to display months._
+
+-> the-events-calendar/src/views/v2/list/event/date-tag.php 
+
+
+	$event_month_title  = $display_date->format_i18n( 'M' );
+	$event_day_num   = $display_date->format_i18n( 'j' );
+	$event_date_attr = $display_date->format( Dates::DBDATEFORMAT );
+	?>
+	<div class="tribe-events-calendar-list__event-date-tag tribe-common-g-col">
+		<time class="tribe-events-calendar-list__event-date-tag-datetime" datetime="<?php echo esc_attr( $event_date_attr ); ?>" aria-hidden="true">
+			<span class="tribe-events-calendar-list__event-date-tag-weekday">
+				<?php echo esc_html( $event_month_title ); ?>
+			</span>
+			<span class="tribe-events-calendar-list__event-date-tag-daynum tribe-common-h5 tribe-common-h4--min-medium">
+				<?php echo esc_html( $event_day_num ); ?>
+			</span>
+		</time>
+	</div>
+
+## H5P 
+
+h5pmods-wordpress-plugin-master/styles/general.css 
+
+	.h5p-inner {
+	border: 1px solid #999 !important;
+	}
 
 ## Zotpress
 
@@ -125,74 +135,80 @@ zotpress/lib/shortcode/shortcode.request.php
 					} // Check if item has children
 				} // $zpr["downloadable"]
 				
-## Elementor Pro
 
-elementor-pro/modules/posts/skins/skin-cards.php
 
-	protected function render_badge() {
-			$taxonomy = $this->get_instance_value( 'badge_taxonomy' );
-			if ( empty( $taxonomy ) || ! taxonomy_exists( $taxonomy ) ) {
-				return;
-			}
 
-			$terms = get_the_terms( get_the_ID(), $taxonomy );
-			if ( ! is_array( $terms ) ) {
-				return;
-			}
-			?>
-			<div class="elementor-post__badges"><?php
-				$i=1;
-				foreach( array_slice($terms,0,3) as $term ) : ?>
-					<div class="elementor-post__badge elementor-post__badge<?php echo $i; ?>"><?php echo $term->name; ?></div>
-				
-				<?php 
-			$i+=1; 
-			endforeach; ?>
-				</div>
-			<?php
+# Theme
+## Filter for Lernmaterialien
+
+_Filter "Lernmodule" by date. Add case and replace alphabetical._
+
+-> BuddyBoss Theme: inc/plugins/learndash-helper.php
+
+	BuddyBossTheme/Learndash/Archive/DefaultOrderBy', 'alphabetical' (replace with 'recent')
+
+	(case 'recent': hinzufügen)
+
+	case 'recent':
+					$query_order_by = 'date';
+					$query_order    = 'desc';
+					break;
+
+
+
+
+
+## Enable excerpts for LearnDash Topics
+
+-> BuddyBoss Theme: Theme-Funktionen (functions.php)
+
+	function add_excerpts_to_ld_topic() {
+		add_post_type_support( 'sfwd-topic', 'excerpt' );
+	}
+	add_action( 'init', 'add_excerpts_to_ld_topic' );
+
+
+
+### Fix for random pagination issues
+
+	session_start();
+
+	add_filter('posts_orderby', 'edit_posts_orderby');
+
+	function edit_posts_orderby($orderby_statement) {
+
+	if (is_page('einzelmaterialien') || is_page('links')) {
+		$seed = $_SESSION['seed'];
+		if (empty($seed)) {
+		$seed = rand();
+		$_SESSION['seed'] = $seed;
 		}
 
-##  Events Widget 
-
-events-widgets-for-elementor-and-the-events-calendar/widgets/layouts/ectbe-list.php
-
-	$events_html .='<h2 class="ectbe-list-title"><a href="'.esc_url( $url).'">'.$event_title.'</a></h2>
-
-	// Remove this! //
-
-	elseif ( $style == 'style-1' ) {
-					$events_html .= $ectbe_read_more;
-				}
-
-
-## Events Calendar 
-
- the-events-calendar/src/views/v2/list/event/date-tag.php 
-
-
-	$event_month_title  = $display_date->format_i18n( 'M' );
-	$event_day_num   = $display_date->format_i18n( 'j' );
-	$event_date_attr = $display_date->format( Dates::DBDATEFORMAT );
-	?>
-	<div class="tribe-events-calendar-list__event-date-tag tribe-common-g-col">
-		<time class="tribe-events-calendar-list__event-date-tag-datetime" datetime="<?php echo esc_attr( $event_date_attr ); ?>" aria-hidden="true">
-			<span class="tribe-events-calendar-list__event-date-tag-weekday">
-				<?php echo esc_html( $event_month_title ); ?>
-			</span>
-			<span class="tribe-events-calendar-list__event-date-tag-daynum tribe-common-h5 tribe-common-h4--min-medium">
-				<?php echo esc_html( $event_day_num ); ?>
-			</span>
-		</time>
-	</div>
-
-## Taxopress 
-
-	<a href="%tag_link%" id="tag-link-%tag_id%" class="st-tags t%tag_scale%" title="%tag_count% topics" %tag_rel% style="%tag_size% %tag_color%">%tag_name%</a>
-
-## H5P 
-
-h5pmods-wordpress-plugin-master/styles/general.css 
-
-	.h5p-inner {
-	border: 1px solid #999 !important;
+		$orderby_statement = 'RAND('.$seed.')';
 	}
+		return $orderby_statement;
+	}
+
+
+# Deprecated fixes
+## Sidebar htmlentities
+
+BuddyBoss Theme: learndash-sidebar.php (learndash/ld30/learndash-sidebar.php)
+
+	<a href="<?php echo get_permalink( $lesson->ID ); ?>" title="<?php echo htmlEntities($lesson->post_title); ?>" class="bb-lesson-head flex">
+	
+	<h2 class="course-entry-title"><?php echo $parent_course_title; ?></h2>
+
+#### Fix missing title with trailing exams
+
+	<span class="flex-1 bb-lms-title <?php echo esc_attr( learndash_is_quiz_complete( $user_id, $lesson_quiz['post']->ID, $course_id ) ? 'bb-completed-item' : 'bb-not-completed-item' ); ?>">
+	<?php echo $lesson_quiz['post']->post_title; ?>
+	</span>
+
+ ## Course placeholders
+
+_Rename Course to Inhalt on Lernmodule pages._
+
+-> learndash/ld30/course.php
+
+	esc_html_x( 'Inhalt', 'placeholder: Course', 'buddyboss-theme' ),
