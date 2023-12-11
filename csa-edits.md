@@ -76,7 +76,9 @@ h5pmods-wordpress-plugin-master/styles/general.css
 
 ## Zotpress
 
-zotpress/js/zotpress.shortcode.bib.min.js (aktiv)
+_Adding notes to the zotpress items._
+
+-> zotpress/js/zotpress.shortcode.bib.min.js (aktiv)
 
 	// Add abstracts, if any
 	
@@ -84,19 +86,22 @@ zotpress/js/zotpress.shortcode.bib.min.js (aktiv)
 		( item.data.hasOwnProperty('abstractNote') && item.data.abstractNote.length > 0 ) )
 		tempItem +="<p class='zp-Abstract'><span class='zp-Abstract-Title'>Abstract:</span> " +item.data.abstractNote+ "</p>\n";
 								
-	// Add notes, if any
+	// Add this part -->  Add notes, if any 
 		if ( params.zpShowNotes == true && item.hasOwnProperty('notes') )
 		tempItem +="<div class='zp-Citation-Notes' tabindex='0'>" +item.notes+ "</div>\n";
 
 	// Add tags, if any
 
-zotpress/lib/shortcode/shortcode.request.php (aktiv)
+_Open notes links in new tabs._
+
+-> zotpress/lib/shortcode/shortcode.request.php (aktiv)
 
 		$zp_target_output = "target='_blank' ";
 
-zotpress/lib/shortcode/shortcode.request.php
+-> zotpress/lib/shortcode/shortcode.request.php
 
-	Cite -> Zitieren
+_Replace "Cite" mit "Zitieren"._
+_Add notes to the citations._
 
 
 	// Display notes, if any
@@ -108,7 +113,7 @@ zotpress/lib/shortcode/shortcode.request.php
                                 	// Add to item
 								$item->notes = $temp_notes . "</li>\n";
 
-								// Add note reference to citation
+					// Add note reference to citation
 								$note_class = "zp-Notes-Reference"; if ( is_admin_bar_showing() ) $note_class .= " zp-Admin-Bar-Showing";
 								$item->bib = preg_replace('~(.*)' . preg_quote('</div>', '~') . '(.*?)~', '$1' . " <sup class=\"".$note_class."\"><a href=\"#zp-Note-".$item->key."\">".$zp_notes_num."</a></sup> </div>" . '$2', $item->bib, 1);
 								$zp_notes_num++;
@@ -126,7 +131,7 @@ zotpress/lib/shortcode/shortcode.request.php
                                     	// Add to item
 								$item->notes = $temp_notes . "</li>\n";
 
-								// Add note reference to citation
+					// Add note reference to citation
 								$note_class = "zp-Notes-Reference"; if ( is_admin_bar_showing() ) $note_class .= " zp-Admin-Bar-Showing";
 								$item->bib = preg_replace('~(.*)' . preg_quote('</div>', '~') . '(.*?)~', '$1' . " <sup class=\"".$note_class."\"><a href=\"#zp-Note-".$item->key."\">".$zp_notes_num."</a></sup> </div>" . '$2', $item->bib, 1);
 								$zp_notes_num++;
